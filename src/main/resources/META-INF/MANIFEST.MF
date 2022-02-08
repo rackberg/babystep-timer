@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Main-Class: de.lrosenberg.kata.babystep_timer.domain.BabyStepTimer
+Class-Path: JavaEWAH-1.1.13.jar Maven__org_eclipse_jgit_org_eclipse_jgit
+ _6_0_0_202111291000-r.jar commons-lang3-3.12.0.jar org.eclipse.jgit-6.0
+ .0.202111291000-r.jar slf4j-api-1.7.30.jar
+
