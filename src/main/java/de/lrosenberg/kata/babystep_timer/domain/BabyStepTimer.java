@@ -105,6 +105,8 @@ public class BabyStepTimer implements Runnable {
 
         JButton buttonCommit = new JButton("Commit & Restart");
         buttonCommit.setUI(new MetalButtonUI());
+        buttonCommit.setBackground(new Color(255, 255, 255, 10));
+        buttonCommit.setForeground(new Color(0, 0, 0, 100));
         buttonCommit.addMouseListener(new MouseInputAdapter() {
             public void mouseEntered(MouseEvent e) {
                 buttonCommit.setBackground(new Color(255, 255, 255, 255));
@@ -127,10 +129,7 @@ public class BabyStepTimer implements Runnable {
 
         JButton buttonRestart = new JButton("Restart timer");
         buttonRestart.addActionListener(e -> timer.restart());
-        //buttonRestart.setOpaque(true);
         buttonRestart.setUI(new MetalButtonUI());
-        //buttonRestart.setContentAreaFilled(false);
-        //buttonRestart.setBorderPainted(false);
         buttonRestart.setBackground(new Color(255, 255, 255, 10));
         buttonRestart.setForeground(new Color(0, 0, 0, 100));
         buttonRestart.addMouseListener(new MouseInputAdapter() {
@@ -144,6 +143,23 @@ public class BabyStepTimer implements Runnable {
                 buttonRestart.setForeground(new Color(0, 0, 0, 100));
             };
         });
+
+        JButton buttonExit = new JButton("Exit timer");
+        buttonExit.addActionListener(e -> System.exit(0));
+        buttonExit.setUI(new MetalButtonUI());
+        buttonExit.setBackground(new Color(255, 255, 255, 10));
+        buttonExit.setForeground(new Color(0, 0, 0, 100));
+        buttonExit.addMouseListener(new MouseInputAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                buttonExit.setBackground(new Color(255, 255, 255, 255));
+                buttonExit.setForeground(new Color(0, 0, 0, 255));
+            };
+
+            public void mouseExited(MouseEvent e) {
+                buttonExit.setBackground(new Color(255, 255, 255, 10));
+                buttonExit.setForeground(new Color(0, 0, 0, 100));
+            };
+        });
     
         JFrame f = new JFrame("BabyStep-Timer");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -154,6 +170,7 @@ public class BabyStepTimer implements Runnable {
         panel.setBackground(new Color(0, 0, 0, 0));
         panel.add(buttonCommit);
         panel.add(buttonRestart);
+        panel.add(buttonExit);
         
         f.getContentPane().add(panel);
         f.setLocationByPlatform(true);
