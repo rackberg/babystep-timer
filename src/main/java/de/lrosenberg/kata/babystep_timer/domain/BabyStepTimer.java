@@ -11,6 +11,10 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+
+import java.awt.Color;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class BabyStepTimer implements Runnable {
@@ -95,6 +99,34 @@ public class BabyStepTimer implements Runnable {
         timer.setRunning(true);
         Thread thread = new Thread(timer);
         thread.start();
+
+        JButton buttonCommit = new JButton("Commit & Restart");
+        buttonCommit.addActionListener(e -> {
+            try {
+                gitCommit();
+                timer.restart();
+            } catch (IOException | GitAPIException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        JButton buttonRestart = new JButton("Restart timer");
+        buttonRestart.addActionListener(e -> timer.restart());
+    
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(0, 0, 0, 0));
+        panel.add(buttonCommit);
+        panel.add(buttonRestart);
+
+        JFrame f = new JFrame("BabyStep-Timer");
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        f.setUndecorated(true);
+        f.setBackground(new Color(0, 0, 0, 0));
+        f.getContentPane().add(panel);
+        f.setLocationRelativeTo(null);
+        f.setAlwaysOnTop(true);
+        f.pack();
+        f.setVisible(true);
     }
 
     private static void showAlertDialog(BabyStepTimer timer) {
