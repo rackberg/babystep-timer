@@ -1,5 +1,5 @@
 # babystep-timer
-A simple application to make TDD practising/doing easier.
+A simple application to make TDD practising/work easier.
 
 I've developed the babystep-timer because I love to practise and do Test-Driven-Development.
 To learn and practise TDD there are several code katas available on the internet. One basic rule
