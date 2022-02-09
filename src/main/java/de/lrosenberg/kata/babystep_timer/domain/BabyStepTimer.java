@@ -1,5 +1,6 @@
 package de.lrosenberg.kata.babystep_timer.domain;
 
+import de.lrosenberg.kata.babystep_timer.presentation.MotionPanel;
 import de.lrosenberg.kata.babystep_timer.presentation.TimerDialog;
 import de.lrosenberg.kata.babystep_timer.presentation.TimerDialog.TimerDialogListener;
 import org.eclipse.jgit.api.Git;
@@ -112,16 +113,30 @@ public class BabyStepTimer implements Runnable {
 
         JButton buttonRestart = new JButton("Restart timer");
         buttonRestart.addActionListener(e -> timer.restart());
+        buttonRestart.setOpaque(false);
+        buttonRestart.setContentAreaFilled(false);
+        buttonRestart.setBorderPainted(false);
+        buttonRestart.setForeground(new Color(0, 0, 0, 100));
     
-        JPanel panel = new JPanel();
-        panel.setBackground(new Color(0, 0, 0, 0));
-        panel.add(buttonCommit);
-        panel.add(buttonRestart);
-
         JFrame f = new JFrame("BabyStep-Timer");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setUndecorated(true);
         f.setBackground(new Color(0, 0, 0, 0));
+
+        JPanel panel = new MotionPanel(f);
+        panel.setBackground(new Color(0, 0, 0, 0));
+        panel.add(buttonCommit);
+        panel.add(buttonRestart);
+        f.addMouseListener(new MouseInputAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                panel.setBackground(new Color(255, 255, 255, 255));
+            };
+
+            public void mouseExited(MouseEvent e) {
+                panel.setBackground(new Color(0, 0, 0, 0));
+            };
+        });
+        
         f.getContentPane().add(panel);
         f.setLocationRelativeTo(null);
         f.setAlwaysOnTop(true);
