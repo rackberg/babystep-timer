@@ -129,11 +129,11 @@ public class BabyStepTimer implements Runnable {
         panel.add(buttonRestart);
         f.addMouseListener(new MouseInputAdapter() {
             public void mouseEntered(MouseEvent e) {
-                panel.setBackground(new Color(255, 255, 255, 255));
+                f.setBackground(new Color(255, 255, 255, 255));
             };
 
             public void mouseExited(MouseEvent e) {
-                panel.setBackground(new Color(0, 0, 0, 0));
+                f.setBackground(new Color(0, 0, 0, 0));
             };
         });
         
