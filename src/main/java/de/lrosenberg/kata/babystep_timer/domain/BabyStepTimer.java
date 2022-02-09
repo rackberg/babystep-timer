@@ -13,6 +13,8 @@ import org.eclipse.jgit.revwalk.RevWalk;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.metal.MetalButtonUI;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -102,6 +104,18 @@ public class BabyStepTimer implements Runnable {
         thread.start();
 
         JButton buttonCommit = new JButton("Commit & Restart");
+        buttonCommit.setUI(new MetalButtonUI());
+        buttonCommit.addMouseListener(new MouseInputAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                buttonCommit.setBackground(new Color(255, 255, 255, 255));
+                buttonCommit.setForeground(new Color(0, 0, 0, 255));
+            };
+
+            public void mouseExited(MouseEvent e) {
+                buttonCommit.setBackground(new Color(255, 255, 255, 10));
+                buttonCommit.setForeground(new Color(0, 0, 0, 100));
+            };
+        });
         buttonCommit.addActionListener(e -> {
             try {
                 gitCommit();
@@ -113,10 +127,23 @@ public class BabyStepTimer implements Runnable {
 
         JButton buttonRestart = new JButton("Restart timer");
         buttonRestart.addActionListener(e -> timer.restart());
-        buttonRestart.setOpaque(false);
-        buttonRestart.setContentAreaFilled(false);
-        buttonRestart.setBorderPainted(false);
+        //buttonRestart.setOpaque(true);
+        buttonRestart.setUI(new MetalButtonUI());
+        //buttonRestart.setContentAreaFilled(false);
+        //buttonRestart.setBorderPainted(false);
+        buttonRestart.setBackground(new Color(255, 255, 255, 10));
         buttonRestart.setForeground(new Color(0, 0, 0, 100));
+        buttonRestart.addMouseListener(new MouseInputAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                buttonRestart.setBackground(new Color(255, 255, 255, 255));
+                buttonRestart.setForeground(new Color(0, 0, 0, 255));
+            };
+
+            public void mouseExited(MouseEvent e) {
+                buttonRestart.setBackground(new Color(255, 255, 255, 10));
+                buttonRestart.setForeground(new Color(0, 0, 0, 100));
+            };
+        });
     
         JFrame f = new JFrame("BabyStep-Timer");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -127,18 +154,9 @@ public class BabyStepTimer implements Runnable {
         panel.setBackground(new Color(0, 0, 0, 0));
         panel.add(buttonCommit);
         panel.add(buttonRestart);
-        f.addMouseListener(new MouseInputAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                f.setBackground(new Color(255, 255, 255, 255));
-            };
-
-            public void mouseExited(MouseEvent e) {
-                f.setBackground(new Color(0, 0, 0, 0));
-            };
-        });
         
         f.getContentPane().add(panel);
-        f.setLocationRelativeTo(null);
+        f.setLocationByPlatform(true);
         f.setAlwaysOnTop(true);
         f.pack();
         f.setVisible(true);
