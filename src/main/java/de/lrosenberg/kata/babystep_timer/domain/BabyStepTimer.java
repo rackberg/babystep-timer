@@ -62,8 +62,6 @@ public class BabyStepTimer implements Runnable {
             timerListener.timerExpired(this);
             if (autoRestart) {
                 restart();
-            } else {
-                running = false;
             }
         }
     }
@@ -91,7 +89,7 @@ public class BabyStepTimer implements Runnable {
 
         while (running) {
             delta = System.currentTimeMillis() - startTime;
-            if (delta >= 1000) {
+            if (delta >= 1000 && timeLeft > 0) {
                 startTime = System.currentTimeMillis();
                 delta = 0;
                 step();
