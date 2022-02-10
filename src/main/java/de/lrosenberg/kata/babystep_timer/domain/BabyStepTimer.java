@@ -13,7 +13,6 @@ import org.eclipse.jgit.revwalk.RevWalk;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.metal.MetalButtonUI;
 
 import java.awt.Color;
