@@ -16,20 +16,32 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.metal.MetalButtonUI;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class BabyStepTimer implements Runnable {
     public static final int TWO_MINUTES = 60 * 2;
 
-    private final TimerExpiredListener expiredListener;
+    private static BabyStepTimer instance = null;
+
+    private final TimerListener timerListener;
 
     private int timeLeft = TWO_MINUTES;
     private boolean autoRestart;
     private boolean running;
 
-    public BabyStepTimer(TimerExpiredListener expiredListener) {
-        this.expiredListener = expiredListener;
+    public static BabyStepTimer createInstance(TimerListener timerListener) {
+        instance = new BabyStepTimer(timerListener);
+        return instance;
+    }
+
+    public static BabyStepTimer getInstance() {
+        return instance;
+    }
+
+    protected BabyStepTimer(TimerListener timerListener) {
+        this.timerListener = timerListener;
     }
 
     public void step() {
@@ -37,9 +49,17 @@ public class BabyStepTimer implements Runnable {
         long minutes = timeLeft / 60;
         long seconds = timeLeft % 60;
         System.out.printf("\rTime Left: %d minutes, %d seconds", minutes, seconds);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                timerListener.onTick(String.format("%02d:%02d", minutes, seconds));
+            }
+        });
+
         if (timeLeft == 0) {
             System.out.println();
-            expiredListener.timerExpired(this);
+            timerListener.timerExpired(this);
             if (autoRestart) {
                 restart();
             } else {
@@ -87,8 +107,9 @@ public class BabyStepTimer implements Runnable {
         this.running = running;
     }
 
-    interface TimerExpiredListener {
+    interface TimerListener {
         void timerExpired(BabyStepTimer timer);
+        void onTick(String timeString);
     }
 
     public static void main(String[] args) {
@@ -97,7 +118,24 @@ public class BabyStepTimer implements Runnable {
     }
 
     private static void initializeTimer() {
-        BabyStepTimer timer = new BabyStepTimer(BabyStepTimer::showAlertDialog);
+        JLabel labelTimeLeft = new JLabel("Time Left: 02:00");
+        labelTimeLeft.setFont(new Font("Verdana", Font.BOLD, 16));
+        labelTimeLeft.setForeground(new Color(0, 255, 0, 100));
+        labelTimeLeft.setVerticalAlignment(SwingConstants.TOP);
+
+        BabyStepTimer timer = BabyStepTimer.createInstance(new TimerListener() {
+
+            @Override
+            public void timerExpired(BabyStepTimer timer) {
+                showAlertDialog(timer);
+            }
+
+            @Override
+            public void onTick(String timeString) {
+                labelTimeLeft.setText("Time Left: " + timeString);
+            }
+            
+        });
         timer.setRunning(true);
         Thread thread = new Thread(timer);
         thread.start();
@@ -170,6 +208,7 @@ public class BabyStepTimer implements Runnable {
         panel.add(buttonCommit);
         panel.add(buttonRestart);
         panel.add(buttonExit);
+        panel.add(labelTimeLeft);
         
         f.getContentPane().add(panel);
         f.setLocationByPlatform(true);
@@ -180,13 +219,13 @@ public class BabyStepTimer implements Runnable {
 
     private static void showAlertDialog(BabyStepTimer timer) {
         JFrame f = new JFrame("BabyStep-Timer");
-        TimerDialog dialog = new TimerDialog(f, "Time is up!");
+        TimerDialog dialog = new TimerDialog(f, "Time is up!", timer);
         dialog.setListener(new TimerDialogListener() {
             @Override
-            public void onCommitButtonPressed() {
+            public void onCommitButtonPressed(BabyStepTimer timer) {
                 try {
                     gitCommit();
-                    initializeTimer();
+                    timer.restart();
                     dialog.dispose();
                 } catch (IOException | GitAPIException ex) {
                     ex.printStackTrace();
@@ -194,10 +233,10 @@ public class BabyStepTimer implements Runnable {
             }
 
             @Override
-            public void onRevertButtonPressed() {
+            public void onRevertButtonPressed(BabyStepTimer timer) {
                 try {
                     gitRevert();
-                    initializeTimer();
+                    timer.restart();
                     dialog.dispose();
                 } catch (IOException | GitAPIException ex) {
                     ex.printStackTrace();
@@ -205,8 +244,8 @@ public class BabyStepTimer implements Runnable {
             }
 
             @Override
-            public void onRestartButtonPressed() {
-                initializeTimer();
+            public void onRestartButtonPressed(BabyStepTimer timer) {
+                timer.restart();
                 dialog.dispose();
             }
 

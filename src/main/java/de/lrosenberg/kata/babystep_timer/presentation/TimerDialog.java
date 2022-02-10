@@ -2,22 +2,28 @@ package de.lrosenberg.kata.babystep_timer.presentation;
 
 import javax.swing.*;
 
+import de.lrosenberg.kata.babystep_timer.domain.BabyStepTimer;
+
 public class TimerDialog extends JDialog {
 
+    private final BabyStepTimer babyStepTimer;
+
     public interface TimerDialogListener {
-        void onCommitButtonPressed();
+        void onCommitButtonPressed(BabyStepTimer timer);
 
-        void onRevertButtonPressed();
+        void onRevertButtonPressed(BabyStepTimer timer);
 
-        void onRestartButtonPressed();
+        void onRestartButtonPressed(BabyStepTimer timer);
 
         void onExitButtonPressed();
     }
 
     private TimerDialogListener listener;
 
-    public TimerDialog(JFrame frame, String title) {
+    public TimerDialog(JFrame frame, String title, BabyStepTimer babyStepTimer) {
         super(frame, title);
+        this.babyStepTimer = babyStepTimer;
+
         JButton buttonCommit = new JButton("Commit & Restart");
         buttonCommit.setMnemonic('c');
         JButton buttonRevert = new JButton("Revert & Restart");
@@ -27,9 +33,9 @@ public class TimerDialog extends JDialog {
         JButton buttonExit = new JButton("Exit");
         buttonExit.setMnemonic('x');
 
-        buttonCommit.addActionListener(e -> listener.onCommitButtonPressed());
-        buttonRevert.addActionListener(e -> listener.onRevertButtonPressed());
-        buttonRestart.addActionListener(e -> listener.onRestartButtonPressed());
+        buttonCommit.addActionListener(e -> listener.onCommitButtonPressed(babyStepTimer));
+        buttonRevert.addActionListener(e -> listener.onRevertButtonPressed(babyStepTimer));
+        buttonRestart.addActionListener(e -> listener.onRestartButtonPressed(babyStepTimer));
         buttonExit.addActionListener(e -> listener.onExitButtonPressed());
 
         JPanel panel = new JPanel();

@@ -1,6 +1,6 @@
 package de.lrosenberg.kata.babystep_timer.domain;
 
-import de.lrosenberg.kata.babystep_timer.domain.BabyStepTimer.TimerExpiredListener;
+import de.lrosenberg.kata.babystep_timer.domain.BabyStepTimer.TimerListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,12 +12,12 @@ import static org.mockito.Mockito.*;
 public class BabyStepTimerTest {
 
     private BabyStepTimer timer;
-    private TimerExpiredListener expiredListener;
+    private TimerListener timerListener;
 
     @BeforeEach
     void setUp() {
-        expiredListener = mock(TimerExpiredListener.class);
-        timer = new BabyStepTimer(expiredListener);
+        timerListener = mock(TimerListener.class);
+        timer = BabyStepTimer.createInstance(timerListener);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class BabyStepTimerTest {
     @Test
     void testExpirationListenerWillBeCalledWhenTimeLeftIsZero() {
         stepSeconds(timer, TWO_MINUTES + 1);
-        verify(expiredListener).timerExpired(eq(timer));
+        verify(timerListener).timerExpired(eq(timer));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class BabyStepTimerTest {
 
     @Test
     void testTimerRestartsAutomaticallyWhenAutoRestartIsTrue() {
-        BabyStepTimer spyTimer = spy(new BabyStepTimer(expiredListener));
+        BabyStepTimer spyTimer = spy(new BabyStepTimer(timerListener));
         spyTimer.setAutoRestart(true);
         stepSeconds(spyTimer, TWO_MINUTES);
         spyTimer.step();
