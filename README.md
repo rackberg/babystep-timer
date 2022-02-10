@@ -35,8 +35,10 @@ See source for further information: https://blog.adrianbolboaca.ro/2013/03/takin
 
 ## How to use it
 The application can be started by executing the babystep-timer.jar file.
-When the application runs, a visible timer will be shown in the terminal where it has been started.
-The timer runs for 2 minutes. When the timer expires a window will be shown where you can choose...
+When the application runs, a visible timer will be shown in a translucent window.
+You can drag the window by clicking and holding on the label beneath the buttons.
+The buttons will be fully visible on hovering over them.
+The timer runs for 2 minutes. When the timer expires a dialog window will be shown where you can choose...
 * to exit the application
 * restart the timer
 * commit the current changes made in the repository and then restart the timer
@@ -45,8 +47,7 @@ The timer runs for 2 minutes. When the timer expires a window will be shown wher
 After choosing an option the window disappears and you can continue with your development work until the timer window shows up again.
 
 ## Why should I use the babystep-timer?
-By using the babystep-timer you are able to focus on the development work while the timer runs in the background and let you choose what to do
-when the time is up. 
+By using the babystep-timer you are able to focus on the development work while the timer runs and let you choose what to do when the time is up. 
 
 Some examples: 
 * if the timer expired and you are still in the red phase of the TDD cycle, you can choose to revert the code changes made and restart the timer
